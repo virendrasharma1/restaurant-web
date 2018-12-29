@@ -3,14 +3,23 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { SignInComponent } from './non-authenticated/sign-in/sign-in.component';
+import {RouterModule} from '@angular/router';
+import {routing} from './app.routing';
+import {HttpClientModule} from '@angular/common/http';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SignInComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule,
+    HttpClientModule,
+    routing
   ],
   providers: [],
   bootstrap: [AppComponent]
