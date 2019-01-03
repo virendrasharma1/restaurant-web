@@ -1,3 +1,28 @@
-.jd {
-  color: red;
+body {
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.loginimg img{
+  width: 780px;
+  height: 772px;
+}
+
+.details {
+  margin-top: 80px;
+  margin-left: 100px;
+}
+
+.details h2 {
+  color: #42434A;
+}
+
+.details h5 {
+  color: #A4A6B2;
+}
+
+.signtext {
+  margin-top: 100px;
+  color: #42434A;
 }
