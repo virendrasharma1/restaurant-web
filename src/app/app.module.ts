@@ -6,6 +6,11 @@ import { SignInComponent } from './non-authenticated/launch/sign-in/sign-in.comp
 import {routing} from './app.routing';
 import { RegisterComponent } from './non-authenticated/launch/register/register.component';
 import { LaunchComponent } from './non-authenticated/launch/launch.component';
+import {HttpClientModule} from '@angular/common/http';
+import {AppService} from './services/app.service';
+import {DataStorageService} from './services/datastorage.service';
+import {LoginService} from './services/login.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,9 +21,12 @@ import { LaunchComponent } from './non-authenticated/launch/launch.component';
   ],
   imports: [
     BrowserModule,
-    routing
+    routing,
+    HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [AppService, DataStorageService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
