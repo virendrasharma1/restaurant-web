@@ -31,10 +31,6 @@ export class DataStorageService {
     this.remove(AppConstants.DEVICE_STORAGE_KEY);
     this.remove(AppConstants.AUTH_STORAGE_KEY);
     this.remove(AppConstants.SESSION_RESTAURANT_ID);
-    this.remove(AppConstants.APP_USER_NAME);
-    this.remove(AppConstants.APP_MEDIA_URL);
-    this.remove(AppConstants.APP_MOBILE_NUMBER);
-    this.remove(AppConstants.APP_EMAIL_ADDRESS);
     // this.remove(AppConstants.GCM_TOKEN);
   }
 

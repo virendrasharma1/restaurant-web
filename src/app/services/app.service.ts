@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, of} from 'rxjs/index';
 import {catchError, map, tap} from 'rxjs/operators';
 import {AppConstants} from '../shared/app.constants';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {DataStorageService} from './datastorage.service';
+import {Router} from '@angular/router';
 
 
 const endpoint = 'http://localhost:8080/restaurants';
@@ -14,14 +16,28 @@ const httpOptions = {
 @Injectable()
 export class AppService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private dataStorageService: DataStorageService,  private router: Router) {
   }
 
-  createUnAuthHeader() {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('X-com-app-id', AppConstants.HEADER_APP_ID);
-    return headers;
+  static isNotEmpty(value: string) {
+    return value !== null && value.length > 0;
+  }
+
+  createAuthorizationHeader() {
+    const authToken = this.dataStorageService.read(AppConstants.AUTH_STORAGE_KEY);
+    const deviceId = this.dataStorageService.read(AppConstants.DEVICE_STORAGE_KEY);
+    const restaurantId = this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
+
+    if (AppService.isNotEmpty(restaurantId)) {
+      const headers = new HttpHeaders();
+      headers.append('Content-Type', 'application/json');
+      headers.append('X-com-restaurant-id', restaurantId);
+      headers.append('X-com-auth-token', authToken);
+      headers.append('X-com-device-id', deviceId);
+      return headers;
+    }  else {
+      this.router.navigate([AppConstants.LAUNCH_URL]);
+    }
   }
 
   get(url): Observable<any> {
@@ -31,7 +47,7 @@ export class AppService {
   }
 
   post(url, payload): Observable<any> {
-    return this.http.post<any>(endpoint + url, payload, {headers: this.createUnAuthHeader()}).pipe(
+    return this.http.post<any>(endpoint + url, payload, {headers: this.createAuthorizationHeader()}).pipe(
       tap(data => data),
       catchError(this.handleError<any>('post'))
     );
