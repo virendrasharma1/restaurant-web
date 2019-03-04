@@ -1,18 +1,12 @@
 import {RouterModule, Routes} from '@angular/router';
-import {SignInComponent} from './non-authenticated/launch/sign-in/sign-in.component';
-import {LaunchComponent} from './non-authenticated/launch/launch.component';
-import {RegisterComponent} from './non-authenticated/launch/register/register.component';
+import {SignInComponent} from './non-authenticated/sign-in/sign-in.component';
+import {RegisterComponent} from './non-authenticated/register/register.component';
+import {LandingComponent} from './authenticated/landing/landing.component';
 
 const appRoutes: Routes = [
-  {path: '', redirectTo: '/launch/signin',
-    pathMatch: 'full'},
-  {
-    path: 'launch', component: LaunchComponent,
-    children: [
-      {path: 'signin', component: SignInComponent},
-      {path: 'register', component: RegisterComponent}
-    ]
-  },
+  {path: '', component: SignInComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'landing', component: LandingComponent},
 ];
 
 export const routing = RouterModule.forRoot(appRoutes, {useHash: true});

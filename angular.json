@@ -23,12 +23,14 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/style.css",
+              "src/assets/css/font-face.css",
+              "src/assets/css/theme.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/js/main.js"
             ]
           },
           "configurations": {
