@@ -5,21 +5,23 @@ import {AppConstants} from '../shared/app.constants';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {DataStorageService} from './datastorage.service';
 import {Router} from '@angular/router';
+import {isNullOrUndefined} from 'util';
 
 
-const endpoint = 'http://localhost:8080/restaurants';
+const endpoint = 'http://localhost:8090/restaurants';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
   })
 };
+
 @Injectable()
 export class AppService {
 
-  constructor(private http: HttpClient, private dataStorageService: DataStorageService,  private router: Router) {
+  constructor(private http: HttpClient, private dataStorageService: DataStorageService, private router: Router) {
   }
 
-  static isNotEmpty(value: string) {
+  isNotEmpty(value: string) {
     return value !== null && value.length > 0;
   }
 
@@ -28,14 +30,14 @@ export class AppService {
     const deviceId = this.dataStorageService.read(AppConstants.DEVICE_STORAGE_KEY);
     const restaurantId = this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
 
-    if (AppService.isNotEmpty(restaurantId)) {
+    if (this.isNotEmpty(restaurantId)) {
       const headers = new HttpHeaders();
       headers.append('Content-Type', 'application/json');
       headers.append('X-com-restaurant-id', restaurantId);
       headers.append('X-com-auth-token', authToken);
       headers.append('X-com-device-id', deviceId);
       return headers;
-    }  else {
+    } else {
       this.router.navigate([AppConstants.LAUNCH_URL]);
     }
   }
@@ -43,26 +45,48 @@ export class AppService {
   get(url): Observable<any> {
     return this.http.get(endpoint + url)
       .pipe(
-        map(data => data));
+        map(data => {
+          if (data) {
+            return this.statusCheck(data);
+          }
+        }));
   }
 
   post(url, payload): Observable<any> {
-    return this.http.post<any>(endpoint + url, payload, {headers: this.createAuthorizationHeader()}).pipe(
-      tap(data => data),
+    return this.http.post<any>(endpoint + url, payload, {
+      headers: this.createAuthorizationHeader(),
+      observe: 'response'
+    }).pipe(
+      map(data => {
+        if (data) {
+          return this.statusCheck(data);
+        }
+      }),
       catchError(this.handleError<any>('post'))
     );
   }
 
   put(url, payload): Observable<any> {
-    return this.http.put(endpoint + url, payload, httpOptions).pipe(
-      tap(data => data),
+    return this.http.put(endpoint + url, payload, {
+      headers: this.createAuthorizationHeader(),
+      observe: 'response'
+    }).pipe(
+      map(data => {
+        if (data) {
+          return this.statusCheck(data);
+        }
+      }),
       catchError(this.handleError<any>('put'))
     );
   }
 
   delete(url): Observable<any> {
-    return this.http.delete<any>(endpoint + url, httpOptions).pipe(
-      tap(data => data),
+    return this.http.delete<any>(endpoint + url, {headers: this.createAuthorizationHeader(), observe: 'response'}).pipe(
+      map(data => {
+        if (data) {
+          return this.statusCheck(data);
+        }
+      }),
       catchError(this.handleError<any>('deleteProduct'))
     );
   }
@@ -72,6 +96,51 @@ export class AppService {
       console.log(error);
       return of(result as T);
     };
+  }
+
+  statusCheck(response) {
+    const data = response.body;
+    if (data.appStatusCode === 10) {
+      if (!isNullOrUndefined(this.dataStorageService.read(AppConstants.AUTH_STORAGE_KEY))) {
+        alert('SESSION EXPIRED');
+        this.router.navigate([AppConstants.LAUNCH_URL]);
+      }
+      this.forceLogout();
+    } else if (data.appStatusCode === 100 || data.appStatusCode === 4) {
+      // this.serverErrorMessage(data);
+    } else {
+      this.saveAuthToken(response.headers);
+      return data;
+    }
+  }
+
+  saveAuthToken(headers: any) {
+    const authToken = headers.get('X-com-auth-token');
+    const deviceId = headers.get('X-com-device-id');
+    const restaurantId = headers.get('X-com-restaurant-id');
+    if (this.isNotEmpty(authToken) && this.isNotEmpty(deviceId) && this.isNotEmpty(restaurantId)) {
+      this.dataStorageService.write(AppConstants.AUTH_STORAGE_KEY, authToken);
+      this.dataStorageService.write(AppConstants.DEVICE_STORAGE_KEY, deviceId);
+      this.dataStorageService.write(AppConstants.SESSION_RESTAURANT_ID, restaurantId);
+    }
+  }
+
+  private forceLogout() {
+    this.dataStorageService.clearLocalStorage();
+    this.router.navigate([AppConstants.LAUNCH_URL]);
+  }
+
+  checkSessionValidity() {
+    const restaurantId = this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
+    if (isNullOrUndefined(this.dataStorageService.read(AppConstants.AUTH_STORAGE_KEY)) || isNullOrUndefined(this.dataStorageService.read(AppConstants.DEVICE_STORAGE_KEY))) {
+      if (!AppConstants.SESSION_NO_CHECK_URL.includes(this.router.url)) {
+        alert('SEssion inactive');
+        this.router.navigate([AppConstants.LAUNCH_URL]);
+      }
+    } else {
+      this.router.navigate([AppConstants.LANDING_URL]);
+      return this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
+    }
   }
 
 }
