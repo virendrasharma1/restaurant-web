@@ -14,6 +14,8 @@ import { LandingComponent } from './authenticated/landing/landing.component';
 import { CreateOrderComponent } from './authenticated/landing/create-order/create-order.component';
 import { MyOrdersComponent } from './authenticated/landing/my-orders/my-orders.component';
 import { AddItemComponent } from './authenticated/landing/add-item/add-item.component';
+import { ViewItemsComponent } from './authenticated/landing/view-items/view-items.component';
+import { OrderDetailsComponent } from './authenticated/landing/order-details/order-details.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { AddItemComponent } from './authenticated/landing/add-item/add-item.comp
     LandingComponent,
     CreateOrderComponent,
     MyOrdersComponent,
-    AddItemComponent
+    AddItemComponent,
+    ViewItemsComponent,
+    OrderDetailsComponent
   ],
   imports: [
     BrowserModule,

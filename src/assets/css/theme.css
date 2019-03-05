@@ -14639,3 +14639,13 @@ section {
 .vue-lists ul, .vue-lists ol {
     padding-left: 30px;
 }
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.align-v-h-center{
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
