@@ -31,11 +31,15 @@ export class AppService {
     const restaurantId = this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
 
     if (this.isNotEmpty(restaurantId)) {
-      const headers = new HttpHeaders();
-      headers.append('Content-Type', 'application/json');
-      headers.append('X-com-restaurant-id', restaurantId);
-      headers.append('X-com-auth-token', authToken);
-      headers.append('X-com-device-id', deviceId);
+      const headers =  new HttpHeaders({
+        'Content-Type':  'application/json',
+        'X-com-restaurant-id': restaurantId,
+        'X-com-auth-token': authToken,
+        'X-com-device-id': deviceId,
+        'X-com-ip-address': '',
+        'X-com-latitude': '',
+        'X-com-longitude': '',
+      });
       return headers;
     } else {
       this.router.navigate([AppConstants.LAUNCH_URL]);
@@ -43,7 +47,11 @@ export class AppService {
   }
 
   get(url): Observable<any> {
-    return this.http.get(endpoint + url)
+    const headers = this.createAuthorizationHeader();
+    return this.http.get(endpoint + url, {
+      headers: headers,
+      observe: 'response'
+    })
       .pipe(
         map(data => {
           if (data) {
@@ -93,7 +101,6 @@ export class AppService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.log(error);
       return of(result as T);
     };
   }
@@ -103,7 +110,6 @@ export class AppService {
     if (data.appStatusCode === 10) {
       if (!isNullOrUndefined(this.dataStorageService.read(AppConstants.AUTH_STORAGE_KEY))) {
         alert('SESSION EXPIRED');
-        this.router.navigate([AppConstants.LAUNCH_URL]);
       }
       this.forceLogout();
     } else if (data.appStatusCode === 100 || data.appStatusCode === 4) {
@@ -134,11 +140,10 @@ export class AppService {
     const restaurantId = this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
     if (isNullOrUndefined(this.dataStorageService.read(AppConstants.AUTH_STORAGE_KEY)) || isNullOrUndefined(this.dataStorageService.read(AppConstants.DEVICE_STORAGE_KEY))) {
       if (!AppConstants.SESSION_NO_CHECK_URL.includes(this.router.url)) {
-        alert('SEssion inactive');
+        alert('Session inactive');
         this.router.navigate([AppConstants.LAUNCH_URL]);
       }
     } else {
-      this.router.navigate([AppConstants.LANDING_URL]);
       return this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
     }
   }

@@ -16,6 +16,8 @@ import { MyOrdersComponent } from './authenticated/landing/my-orders/my-orders.c
 import { AddItemComponent } from './authenticated/landing/add-item/add-item.component';
 import { ViewItemsComponent } from './authenticated/landing/view-items/view-items.component';
 import { OrderDetailsComponent } from './authenticated/landing/order-details/order-details.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatExpansionModule, MatFormField, MatFormFieldModule, MatInputModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,11 @@ import { OrderDetailsComponent } from './authenticated/landing/order-details/ord
     routing,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [AppService, DataStorageService, LoginService],
   bootstrap: [AppComponent]
