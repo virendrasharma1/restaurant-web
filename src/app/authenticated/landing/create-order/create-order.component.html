@@ -13,29 +13,36 @@
       </div>
 
 
-
-      <div class="col-lg-12">
+      <div class="col-lg-12" *ngFor="let item of restaurantItemList; let i = index">
         <div class="card">
-          <div class="card-header">
-            <strong>Item 1</strong>
-              <i class="fa fa-arrow-down pull-right"></i>
-          </div>
+          <mat-accordion>
+            <mat-expansion-panel (opened)="item.panelOpenState = true"
+                                 (closed)="item.panelOpenState = false">
+              <mat-expansion-panel-header (click)="getItemNamesFromType(item.itemType, i)">
+                <mat-panel-title>
+                  {{item.itemType}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <p class="margin-l-10" *ngFor="let itemName of item.itemNameList; let j = index">{{itemName.itemName}}<mat-icon (click) = minusCount(i,j) class="cursor-pointer">arrow_drop_down</mat-icon>{{itemName.count}}<mat-icon (click) = addCount(i,j) class="cursor-pointer">arrow_drop_up</mat-icon><i class="pull-right">{{itemName.totalCost}}</i></p>
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
       </div>
-
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-header">
-            <strong>Item 2</strong>
-              <i class="fa fa-arrow-down pull-right"></i>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="col-lg-12 m-b-25">
+      <i>Total Order Price </i>
+      <i class="pull-right">{{totalOrderCost}}</i>
+    </div>
+    <div>
+      <button id="payment-button" (click)="saveOrder()" type="submit" class="btn btn-lg btn-info btn-block">
+        <span id="payment-button-amount">Add Order</span>
+        <span id="payment-button-sending" style="display:none;">Sending…</span>
+      </button>
     </div>
     <div class="row">
       <div class="col-md-12">
         <div class="copyright">
-          <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+          <p> Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
         </div>
       </div>
     </div>

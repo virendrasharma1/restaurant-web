@@ -24,7 +24,7 @@ export class ViewItemsComponent implements OnInit {
   }
 
   getAllItems() {
-    this.appService.get('/all/items/types')
+    this.appService.get('/items/types')
       .subscribe(data => {
         if (data.appStatusCode === 0) {
           this.itemList = JSON.parse(data.payload);

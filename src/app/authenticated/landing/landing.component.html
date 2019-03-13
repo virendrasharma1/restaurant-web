@@ -44,19 +44,19 @@
       </a>
     </div>
     <div class="menu-sidebar__content js-scrollbar1">
-      <nav class="navbar-sidebar">
+      <nav class="navbar-sidebar p-r-l-0">
         <ul class="list-unstyled navbar__list">
-          <li>
-            <a [routerLink]="['../landing/myorders']" class="cursor-pointer">
-              <i class="fas fa-chart-bar"></i>My Orders</a>
+          <li [routerLinkActive]="['active']">
+            <a [routerLink]="['../landing/myorders']" class="cursor-pointer m-l-20">
+              <i class="mdi mdi-file-chart"></i>My Orders</a>
           </li>
-          <li>
-            <a [routerLink]="['../landing/viewitems']" class="cursor-pointer">
-              <i class="fas fa-table"></i>View your item</a>
+          <li [routerLinkActive]="['active']">
+            <a [routerLink]="['../landing/viewitems']" class="cursor-pointer m-l-20">
+              <i class="mdi mdi-silverware"></i>View your Menu</a>
           </li>
-          <li>
-            <a [routerLink]="['../landing/createorder']" class="cursor-pointer">
-              <i class="far fa-check-square"></i>Add Order</a>
+          <li [routerLinkActive]="['active']">
+            <a [routerLink]="['../landing/createorder']" class="cursor-pointer m-l-20">
+              <i class="mdi mdi-plus-circle-outline"></i>Add Order</a>
           </li>
         </ul>
       </nav>

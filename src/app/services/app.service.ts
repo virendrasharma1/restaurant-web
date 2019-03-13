@@ -144,6 +144,10 @@ export class AppService {
         this.router.navigate([AppConstants.LAUNCH_URL]);
       }
     } else {
+      if (AppConstants.SESSION_NO_CHECK_URL.includes(this.router.url)) {
+        this.router.navigate([AppConstants.LANDING_URL]);
+        return this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
+      }
       return this.dataStorageService.read(AppConstants.SESSION_RESTAURANT_ID);
     }
   }

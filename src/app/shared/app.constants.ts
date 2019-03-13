@@ -4,7 +4,7 @@ export class AppConstants {
   public static HEADER_APP_ID = 'AW';
   public static LAUNCH_URL = '/';
   public static REGISTER_URL = '/register';
-  public static LANDING_URL = 'landing';
+  public static LANDING_URL = 'landing/myorders';
   public static GCM_TOKEN = 'GCM_TOKEN';
   public static AUTH_KEY = 'TOKEN';
   public static DEVICE_KEY = 'DEVICE';
