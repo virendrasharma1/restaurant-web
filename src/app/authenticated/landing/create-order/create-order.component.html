@@ -18,7 +18,7 @@
           <mat-accordion>
             <mat-expansion-panel (opened)="item.panelOpenState = true"
                                  (closed)="item.panelOpenState = false">
-              <mat-expansion-panel-header (click)="getItemNamesFromType(item.itemType, i)">
+              <mat-expansion-panel-header (click)="getItemNamesFromType(item, item.itemType, i)">
                 <mat-panel-title>
                   {{item.itemType}}
                 </mat-panel-title>

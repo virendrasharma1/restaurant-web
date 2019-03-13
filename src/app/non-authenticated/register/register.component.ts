@@ -40,12 +40,19 @@ export class RegisterComponent implements OnInit {
   }
 
   register(restaurant) {
-    this.appService.post('/register', restaurant)
-      .subscribe(data => {
-        if (data.appStatusCode === 0) {
-          const restaurantId = JSON.parse(data.payload);
-          this.dataStorageService.write(AppConstants.SESSION_RESTAURANT_ID, restaurantId);
-          this.router.navigate([AppConstants.LANDING_URL]);
+    this.appService.get('/exists?id=' + restaurant.emailOrPhone)
+      .subscribe(data1 => {
+        if (data1.appStatusCode !== 0) {
+          this.appService.post('/register', restaurant)
+            .subscribe(data => {
+              if (data.appStatusCode === 0) {
+                const restaurantId = JSON.parse(data.payload);
+                this.dataStorageService.write(AppConstants.SESSION_RESTAURANT_ID, restaurantId);
+                this.router.navigate([AppConstants.LANDING_URL]);
+              }
+            });
+        } else {
+          alert('This email/phone already exist');
         }
       });
   }

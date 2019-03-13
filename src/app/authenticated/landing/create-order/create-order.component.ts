@@ -4,8 +4,8 @@ import {Router} from '@angular/router';
 import {DataStorageService} from '../../../services/datastorage.service';
 import {FormBuilder} from '@angular/forms';
 import {RestaurantOrdersBO} from '../../../bo/restaurantorders.bo';
-import {OrderDetailsComponent} from "../order-details/order-details.component";
-import {OrderDetailsBO} from "../../../bo/orderdetails.bo";
+import {OrderDetailsBO} from '../../../bo/orderdetails.bo';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-create-order',
@@ -42,17 +42,19 @@ export class CreateOrderComponent implements OnInit {
       });
   }
 
-  getItemNamesFromType(itemType, index) {
-    this.appService.get('/item/names?type=' + itemType)
-      .subscribe(data => {
-        if (data.appStatusCode === 0) {
-          this.restaurantItemList[index].itemNameList = JSON.parse(data.payload);
-          for (let i = 0; i < this.restaurantItemList[index].itemNameList.length; i++) {
-            this.restaurantItemList[index].itemNameList[i].count = 0;
-            this.restaurantItemList[index].itemNameList[i].totalCost = 0;
+  getItemNamesFromType(item, itemType, index) {
+    if (isNullOrUndefined(item.itemNameList)) {
+      this.appService.get('/item/names?type=' + itemType)
+        .subscribe(data => {
+          if (data.appStatusCode === 0) {
+            this.restaurantItemList[index].itemNameList = JSON.parse(data.payload);
+            for (let i = 0; i < this.restaurantItemList[index].itemNameList.length; i++) {
+              this.restaurantItemList[index].itemNameList[i].count = 0;
+              this.restaurantItemList[index].itemNameList[i].totalCost = 0;
+            }
           }
-        }
-      });
+        });
+    }
   }
 
   addCount(mainListIndex, subListIndex) {
@@ -108,11 +110,15 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveOrder() {
-    this.appService.post('/order', this.restaurantOrdersBO)
-      .subscribe(data => {
-        if (data.appStatusCode === 0) {
-          this.router.navigate(['landing/myorders']);
-        }
-      });
+    if (this.totalOrderCost !== 0) {
+      this.appService.post('/order', this.restaurantOrdersBO)
+        .subscribe(data => {
+          if (data.appStatusCode === 0) {
+            this.router.navigate(['landing/myorders']);
+          }
+        });
+    } else {
+      alert('Total Amount can not be zero');
+    }
   }
 }
