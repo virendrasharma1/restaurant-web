@@ -17,7 +17,10 @@ import { AddItemComponent } from './authenticated/landing/add-item/add-item.comp
 import { ViewItemsComponent } from './authenticated/landing/view-items/view-items.component';
 import { OrderDetailsComponent } from './authenticated/landing/order-details/order-details.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatExpansionModule, MatFormField, MatFormFieldModule, MatIconModule, MatInputModule} from '@angular/material';
+import {
+  MatAutocompleteModule, MatExpansionModule, MatFormField, MatFormFieldModule, MatIconModule,
+  MatInputModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,8 @@ import {MatExpansionModule, MatFormField, MatFormFieldModule, MatIconModule, Mat
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    MatAutocompleteModule
   ],
   providers: [AppService, DataStorageService, LoginService],
   bootstrap: [AppComponent]

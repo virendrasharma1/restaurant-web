@@ -3,7 +3,7 @@ import {AppService} from '../../../services/app.service';
 import {Router} from '@angular/router';
 import {DataStorageService} from '../../../services/datastorage.service';
 import {FormBuilder, FormGroup, FormGroupName, Validators} from '@angular/forms';
-import {RestaurantItemsBO} from "../../../bo/restaurantItems.bo";
+import {RestaurantItemsBO} from '../../../bo/restaurantItems.bo';
 
 @Component({
   selector: 'app-add-item',
@@ -54,6 +54,14 @@ export class AddItemComponent implements OnInit {
       });
   }
 
+  getNamesThroughItems(itemType) {
+    this.appService.get('/all/item/names?itemType=' + itemType)
+      .subscribe(data => {
+        if (data.appStatusCode === 0) {
+          this.itemNameList = JSON.parse(data.payload);
+        }
+      });
+  }
   addRestaurantItem(itemObject) {
     const restaurantItemsBO = new RestaurantItemsBO();
     restaurantItemsBO.restaurantId = this.restaurantId;
