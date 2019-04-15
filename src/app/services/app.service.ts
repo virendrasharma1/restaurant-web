@@ -8,7 +8,7 @@ import {Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 
 
-const endpoint = 'http://localhost:8090/restaurants';
+const endpoint = 'https://restaurants-services.herokuapp.com/restaurants';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
